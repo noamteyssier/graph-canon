@@ -2,6 +2,11 @@
 name = "graph-canon"
 version = "0.1.0"
 edition = "2021"
+keywords = [ "petgraph", "nauty", "graph-algs", "isomorphism", "canonical" ]
+license = "MIT"
+documentation = "https://docs.rs/graph-canon"
+repository = "https://github.com/noamteyssier/graph-canon"
+description = "Canonical labelling of graphs using nauty-traces built on petgraph"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
