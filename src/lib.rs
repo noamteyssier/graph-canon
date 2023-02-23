@@ -67,7 +67,7 @@
 //! use petgraph::{Directed, Graph};
 //! use graph_canon::canonize;
 //!
-//! let edges = vec![(0, 1), (0, 2), (1, 2)]; // Isomorphic
+//! let edges = vec![(0, 1), (0, 2), (1, 2)];
 //! let graph = Graph::<(), (), Directed>::from_edges(&edges);
 //! let canon = canonize(&graph);
 //! assert_eq!(canon.edge_count(), 3);
@@ -78,7 +78,7 @@
 //! use petgraph::{Undirected, Graph};
 //! use graph_canon::canonize;
 //!
-//! let edges = vec![(0, 1), (0, 2), (1, 2)]; // Isomorphic
+//! let edges = vec![(0, 1), (0, 2), (1, 2)];
 //! let graph = Graph::<(), (), Undirected>::from_edges(&edges);
 //! let canon = canonize(&graph);
 //!
