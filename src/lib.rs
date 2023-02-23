@@ -1,4 +1,4 @@
 pub mod canon;
 pub mod dense;
-pub use canon::canonize;
+pub use canon::{CanonLabeling, canonize};
 pub use dense::DenseGraph;
