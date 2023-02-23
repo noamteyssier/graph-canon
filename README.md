@@ -2,6 +2,8 @@
 
 [![MIT licensed](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE.md)
 ![actions status](https://github.com/noamteyssier/graph-canon/workflows/CI/badge.svg)
+[![codecov](https://codecov.io/gh/noamteyssier/graph-canon/branch/main/graph/badge.svg?token=RVHY8O3873)](https://codecov.io/gh/noamteyssier/graph-canon)
+[![docs.rs](https://img.shields.io/docsrs/graph-canon?color=green&label=docs.rs)](https://docs.rs/graph-canon/latest/graph-canon/)
 
 Super fast and barebones graph canonicalization using `nauty` C-lib
 and built on `petgraph`.
