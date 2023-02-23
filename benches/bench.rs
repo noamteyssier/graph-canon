@@ -1,10 +1,10 @@
 use criterion::{criterion_group, criterion_main, Criterion};
+use graph_canon::{canon::CanonLabeling, canonize, DenseGraph};
 use nauty_pet::prelude::CanonGraph;
 use petgraph::{Directed, Graph};
 use petgraph_gen::random_gnp_graph;
 use rand::SeedableRng;
 use rand_chacha::ChaChaRng;
-use graph_canon::{canon::CanonLabeling, canonize, DenseGraph};
 
 pub fn criterion_benchmark(c: &mut Criterion) {
     let mut rng = ChaChaRng::seed_from_u64(0);

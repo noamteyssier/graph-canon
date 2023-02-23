@@ -1,10 +1,10 @@
 //! # Graph Canon
-//! 
+//!
 //! This crate provides a graph canonization algorithm for directed and undirected graphs
 //! by calling the C library [nauty](https://pallini.di.uniroma1.it/) via [nauty-Traces-sys](https://crates.io/crates/nauty-Traces-sys)
 //!
 //! This crate is built on top of the [petgraph](https://crates.io/crates/petgraph) crate, but is
-//! considerably faster than an existing crate [nauty-pet](https://crates.io/crates/nauty-pet) that 
+//! considerably faster than an existing crate [nauty-pet](https://crates.io/crates/nauty-pet) that
 //! uses similar techniques because it is **very** barebones.
 //!
 //! ## Example
@@ -88,5 +88,5 @@
 
 pub mod canon;
 pub mod dense;
-pub use canon::{CanonLabeling, canonize};
+pub use canon::{canonize, CanonLabeling};
 pub use dense::DenseGraph;

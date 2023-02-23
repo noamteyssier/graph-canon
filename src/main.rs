@@ -1,5 +1,5 @@
-use petgraph::{Directed, Graph};
 use graph_canon::{canon::CanonLabeling, canonize};
+use petgraph::{Directed, Graph};
 
 fn main() {
     let edges = vec![(0, 1), (0, 2), (1, 2)];

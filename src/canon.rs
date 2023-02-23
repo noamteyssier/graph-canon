@@ -125,7 +125,6 @@ where
 mod testing {
     use petgraph::{Directed, Graph, Undirected};
 
-
     #[test]
     fn test_equivalent_digraph() {
         let e1 = vec![(0, 1), (0, 2), (1, 2)];
@@ -191,5 +190,4 @@ mod testing {
         assert_eq!(canon.e, 3);
         assert_eq!(canon.n, 3);
     }
-
 }
