@@ -8,10 +8,10 @@ use rand_chacha::ChaChaRng;
 
 pub fn criterion_benchmark(c: &mut Criterion) {
     let mut rng = ChaChaRng::seed_from_u64(0);
-    let graph: Graph<(), (), Directed> = random_gnp_graph(&mut rng, 10, 0.3);
+    let graph: Graph<(), (), Directed> = random_gnp_graph(&mut rng, 10, 0.5);
 
-    c.bench_function("my_canon", |b| b.iter(|| canonize(&graph)));
-    c.bench_function("their_canon", |b| {
+    c.bench_function("graph-canon", |b| b.iter(|| canonize(&graph)));
+    c.bench_function("nauty-pet", |b| {
         b.iter(|| CanonGraph::from(graph.clone()))
     });
     c.bench_function("to_dense_graph", |b| {
