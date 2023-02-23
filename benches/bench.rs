@@ -11,9 +11,7 @@ pub fn criterion_benchmark(c: &mut Criterion) {
     let graph: Graph<(), (), Directed> = random_gnp_graph(&mut rng, 10, 0.5);
 
     c.bench_function("graph-canon", |b| b.iter(|| canonize(&graph)));
-    c.bench_function("nauty-pet", |b| {
-        b.iter(|| CanonGraph::from(graph.clone()))
-    });
+    c.bench_function("nauty-pet", |b| b.iter(|| CanonGraph::from(graph.clone())));
     c.bench_function("to_dense_graph", |b| {
         b.iter(|| DenseGraph::from_petgraph(&graph))
     });
