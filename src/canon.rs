@@ -6,9 +6,9 @@ use std::os::raw::c_int;
 
 #[derive(Hash, Eq, PartialEq, Debug)]
 pub struct CanonLabeling {
-    g: Vec<u64>,
-    e: usize,
-    n: usize,
+    pub g: Vec<u64>,
+    pub e: usize,
+    pub n: usize,
 }
 impl CanonLabeling {
     pub fn new<N, E, Ty>(graph: &Graph<N, E, Ty>) -> Self
@@ -37,6 +37,22 @@ impl CanonLabeling {
             e: dg.e,
             n: dg.n,
         }
+    }
+
+    /// Returns the adjacency matrix as a flat vector
+    pub fn flat_adjacency(&self) -> Vec<u64> {
+        let mut bit_vector = Vec::with_capacity(self.n * self.n);
+        for num in self.g.iter() {
+            let bv = num.view_bits::<Msb0>();
+            for bit in bv.iter().take(self.n) {
+                if *bit {
+                    bit_vector.push(1);
+                } else {
+                    bit_vector.push(0);
+                }
+            }
+        }
+        bit_vector
     }
 }
 
@@ -189,5 +205,23 @@ mod testing {
         assert_eq!(canon.g, vec![0, 9223372036854775808, 13835058055282163712]);
         assert_eq!(canon.e, 3);
         assert_eq!(canon.n, 3);
+    }
+
+    #[test]
+    fn test_flat_adj_directed() {
+        let edges = vec![(0, 1), (0, 2), (1, 2)];
+        let graph: Graph<(), (), Directed> = Graph::from_edges(&edges);
+        let canon = super::CanonLabeling::new(&graph);
+        let flat_adj = canon.flat_adjacency();
+        assert_eq!(flat_adj, vec![0, 0, 0, 1, 0, 0, 1, 1, 0]);
+    }
+
+    #[test]
+    fn test_flat_adj_undirected() {
+        let edges = vec![(0, 1), (0, 2), (1, 2)];
+        let graph: Graph<(), (), Undirected> = Graph::from_edges(&edges);
+        let canon = super::CanonLabeling::new(&graph);
+        let flat_adj = canon.flat_adjacency();
+        assert_eq!(flat_adj, vec![0, 1, 1, 1, 0, 1, 1, 1, 0]);
     }
 }
