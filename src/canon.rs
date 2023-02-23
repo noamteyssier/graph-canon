@@ -49,12 +49,21 @@ where
     }
 }
 
-impl<Ty> Into<Graph<(), (), Ty>> for CanonLabeling
+impl<Ty> From<CanonLabeling> for Graph<(), (), Ty>
 where
     Ty: EdgeType,
 {
-    fn into(self) -> Graph<(), (), Ty> {
-        bit_adj_to_graph(&self.g, self.e, self.n)
+    fn from(cl: CanonLabeling) -> Self {
+        bit_adj_to_graph(&cl.g, cl.e, cl.n)
+    }
+}
+
+impl<T> From<&Graph<(), (), T>> for CanonLabeling
+where
+    T: EdgeType,
+{
+    fn from(graph: &Graph<(), (), T>) -> Self {
+        Self::new(graph)
     }
 }
 
@@ -110,4 +119,77 @@ where
 {
     let canon = CanonLabeling::new(graph);
     Graph::from(&canon)
+}
+
+#[cfg(test)]
+mod testing {
+    use petgraph::{Directed, Graph, Undirected};
+
+
+    #[test]
+    fn test_equivalent_digraph() {
+        let e1 = vec![(0, 1), (0, 2), (1, 2)];
+        let e2 = vec![(1, 0), (1, 2), (0, 2)];
+
+        let g1: Graph<(), (), Directed> = Graph::from_edges(&e1);
+        let g2: Graph<(), (), Directed> = Graph::from_edges(&e2);
+
+        let l1 = super::CanonLabeling::new(&g1);
+        let l2 = super::CanonLabeling::new(&g2);
+
+        assert_eq!(l1, l2);
+    }
+
+    #[test]
+    fn test_unequal_digraph() {
+        let e1 = vec![(0, 1), (0, 2), (1, 2)];
+        let e2 = vec![(1, 0), (1, 2), (2, 1)];
+
+        let g1: Graph<(), (), Directed> = Graph::from_edges(&e1);
+        let g2: Graph<(), (), Directed> = Graph::from_edges(&e2);
+
+        let l1 = super::CanonLabeling::new(&g1);
+        let l2 = super::CanonLabeling::new(&g2);
+
+        assert_ne!(l1, l2);
+    }
+
+    #[test]
+    fn test_equal_ungraph() {
+        let e1 = vec![(0, 1), (0, 2), (1, 2)];
+        let e2 = vec![(1, 0), (1, 2), (0, 2)];
+
+        let g1: Graph<(), (), Undirected> = Graph::from_edges(&e1);
+        let g2: Graph<(), (), Undirected> = Graph::from_edges(&e2);
+
+        let l1 = super::CanonLabeling::new(&g1);
+        let l2 = super::CanonLabeling::new(&g2);
+
+        assert_eq!(l1, l2);
+    }
+
+    #[test]
+    fn test_unequal_ungraph() {
+        let e1 = vec![(0, 1), (0, 2), (1, 2)];
+        let e2 = vec![(1, 0), (1, 2)];
+
+        let g1: Graph<(), (), Undirected> = Graph::from_edges(&e1);
+        let g2: Graph<(), (), Undirected> = Graph::from_edges(&e2);
+
+        let l1 = super::CanonLabeling::new(&g1);
+        let l2 = super::CanonLabeling::new(&g2);
+
+        assert_ne!(l1, l2);
+    }
+
+    #[test]
+    fn test_label() {
+        let edges = vec![(0, 1), (0, 2), (1, 2)];
+        let graph: Graph<(), (), Directed> = Graph::from_edges(&edges);
+        let canon = super::CanonLabeling::new(&graph);
+        assert_eq!(canon.g, vec![0, 9223372036854775808, 13835058055282163712]);
+        assert_eq!(canon.e, 3);
+        assert_eq!(canon.n, 3);
+    }
+
 }
