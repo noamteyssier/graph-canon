@@ -40,7 +40,7 @@ impl CanonLabeling {
     }
 
     /// Returns the adjacency matrix as a flat vector
-    pub fn flat_adjacency(&self) -> Vec<u64> {
+    pub fn flat_adjacency(&self) -> Vec<usize> {
         let mut bit_vector = Vec::with_capacity(self.n * self.n);
         for num in self.g.iter() {
             let bv = num.view_bits::<Msb0>();
