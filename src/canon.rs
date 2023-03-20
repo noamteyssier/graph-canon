@@ -2,14 +2,29 @@ use crate::dense::DenseGraph;
 use bitvec::prelude::*;
 use nauty_Traces_sys::{densenauty, empty_graph, optionblk, statsblk};
 use petgraph::{EdgeType, Graph};
-use std::os::raw::c_int;
+use std::{os::raw::c_int, hash::{Hash, Hasher}};
 
-#[derive(Hash, Eq, PartialEq, Debug)]
+#[derive(Eq, Debug)]
 pub struct CanonLabeling {
     pub g: Vec<u64>,
     pub e: usize,
     pub n: usize,
+    dense: DenseGraph,
 }
+impl Hash for CanonLabeling {
+    fn hash<H: Hasher>(&self, state: &mut H) {
+        self.g.hash(state);
+        self.e.hash(state);
+        self.n.hash(state);
+    }
+}
+
+impl PartialEq for CanonLabeling {
+    fn eq(&self, other: &Self) -> bool {
+        self.g == other.g && self.e == other.e && self.n == other.n
+    }
+}
+
 impl CanonLabeling {
     pub fn new<N, E, Ty>(graph: &Graph<N, E, Ty>) -> Self
     where
@@ -36,6 +51,7 @@ impl CanonLabeling {
             g: cg,
             e: dg.e,
             n: dg.n,
+            dense: dg,
         }
     }
 
@@ -53,6 +69,10 @@ impl CanonLabeling {
             }
         }
         bit_vector
+    }
+
+    pub fn orbits(&self) -> &[i32] {
+        self.dense.orbits()
     }
 }
 
