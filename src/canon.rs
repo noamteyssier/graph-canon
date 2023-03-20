@@ -2,7 +2,10 @@ use crate::dense::DenseGraph;
 use bitvec::prelude::*;
 use nauty_Traces_sys::{densenauty, empty_graph, optionblk, statsblk};
 use petgraph::{EdgeType, Graph};
-use std::{os::raw::c_int, hash::{Hash, Hasher}};
+use std::{
+    hash::{Hash, Hasher},
+    os::raw::c_int,
+};
 
 #[derive(Eq, Debug)]
 pub struct CanonLabeling {
