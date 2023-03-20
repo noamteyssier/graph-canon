@@ -2,7 +2,7 @@ use nauty_Traces_sys::{empty_graph, ADDONEARC, SETWORDSNEEDED};
 use petgraph::{visit::GetAdjacencyMatrix, EdgeType, Graph};
 use std::ffi::c_int;
 
-#[derive(Debug)]
+#[derive(Debug, Eq, PartialEq, Hash)]
 pub struct DenseGraph {
     pub g: Vec<u64>,
     pub n: usize,
@@ -30,9 +30,13 @@ impl DenseGraph {
         }
         Self { g, n, e, m, nodes }
     }
+
+    pub fn orbits(&self) -> &[i32] {
+        &self.nodes.orbits
+    }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Eq, PartialEq, Hash)]
 pub struct Nodes {
     pub lab: Vec<c_int>,
     pub ptn: Vec<c_int>,
