@@ -85,7 +85,24 @@
 //! // There are currently twice as many edges but may change in the future
 //! assert_eq!(canon.edge_count(), 6);
 //! ```
+//!
+//! ### Recovering the automorphism group of a `Graph`
+//!
+//! If you're interested in the automorphism group of a graph, you can use the `autom` module.
+//!
+//! #### Directed Graphs
+//! ```
+//! use petgraph::{Directed, Graph};
+//! use graph_canon::autom::AutoGroups;
+//!
+//! let edges = vec![(0, 1), (1, 2), (2, 0)];
+//! let graph = Graph::<(), (), Directed>::from_edges(&edges);
+//! let aut = AutoGroups::from_petgraph(&graph);
+//!
+//! assert_eq!(aut.size(), 3);
+//! ```
 
+pub mod autom;
 pub mod canon;
 pub mod dense;
 pub use canon::{canonize, CanonLabeling};
