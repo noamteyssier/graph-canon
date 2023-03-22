@@ -86,6 +86,7 @@
 //! assert_eq!(canon.edge_count(), 6);
 //! ```
 
+pub mod autom;
 pub mod canon;
 pub mod dense;
 pub use canon::{canonize, CanonLabeling};
