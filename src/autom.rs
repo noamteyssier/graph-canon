@@ -80,7 +80,7 @@ impl AutoGroups {
         &self.data
     }
 
-    pub fn n_automorphisms(&self) -> usize {
+    pub fn size(&self) -> usize {
         self.count
     }
 
@@ -153,5 +153,76 @@ extern "C" fn writeautom3(p: *mut i32, n: i32, _abort: *mut i32, userptr: *mut c
             autogroups.data[autogroups.count].push(*p.offset(i as isize));
         }
         autogroups.count += 1;
+    }
+}
+
+#[cfg(test)]
+mod testing {
+    
+    use petgraph::{Directed, Undirected};
+    use super::*;
+
+
+    #[test]
+    fn autogroups_directed() {
+        let e1 = vec![(0, 1), (1, 2), (2, 0)];
+        let e2 = vec![(0, 1), (1, 2), (2, 0), (1, 0), (2, 1), (0, 2)];
+        let g1 = Graph::<(), (), Directed>::from_edges(&e1);
+        let g2 = Graph::<(), (), Directed>::from_edges(&e2);
+        let a1 = AutoGroups::from_petgraph(&g1);
+        let a2 = AutoGroups::from_petgraph(&g2);
+        let expected_1 = vec![
+                vec![0, 1, 2],
+                vec![1, 2, 0],
+                vec![2, 0, 1],
+        ];
+        let expected_2 = vec![
+                vec![0, 1, 2],
+                vec![1, 0, 2],
+                vec![2, 0, 1],
+                vec![0, 2, 1],
+                vec![1, 2, 0],
+                vec![2, 1, 0],
+        ];
+
+        assert_eq!(a1.size(), 3);
+        assert_eq!(a2.size(), 6);
+        assert_eq!(a1.n_nodes(), 3);
+        assert_eq!(a2.n_nodes(), 3);
+
+        for e in expected_1 {
+            assert!(a1.automorphisms().contains(&e));
+        }
+        for e in expected_2 {
+            assert!(a2.automorphisms().contains(&e));
+        }
+    }
+
+    #[test]
+    fn autogroups_undirected() {
+        let e1 = vec![(0, 1), (1, 2), (2, 0)];
+        let e2 = vec![(0, 1), (1, 2), (2, 0), (1, 0), (2, 1), (0, 2)];
+        let g1 = Graph::<(), (), Undirected>::from_edges(&e1);
+        let g2 = Graph::<(), (), Undirected>::from_edges(&e2);
+        let a1 = AutoGroups::from_petgraph(&g1);
+        let a2 = AutoGroups::from_petgraph(&g2);
+        let expected = vec![
+                vec![0, 1, 2],
+                vec![1, 0, 2],
+                vec![2, 0, 1],
+                vec![0, 2, 1],
+                vec![1, 2, 0],
+                vec![2, 1, 0],
+        ];
+
+        assert_eq!(a1.size(), 6);
+        assert_eq!(a2.size(), 6);
+        assert_eq!(a1.n_nodes(), 3);
+        assert_eq!(a2.n_nodes(), 3);
+
+        for e in expected {
+            assert!(a1.automorphisms().contains(&e));
+            assert!(a2.automorphisms().contains(&e));
+        }
     }
 }
