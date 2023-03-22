@@ -1,9 +1,12 @@
 use std::os::raw::{c_int, c_void};
 
-use nauty_Traces_sys::{optionblk, statsblk, groupautomproc, grouplevelproc, densenauty, groupptr, FALSE, makecosetreps, grouprec, empty_graph};
-use petgraph::{Graph, EdgeType};
+use nauty_Traces_sys::{
+    densenauty, empty_graph, groupautomproc, grouplevelproc, groupptr, grouprec, makecosetreps,
+    optionblk, statsblk, FALSE,
+};
+use petgraph::{EdgeType, Graph};
 
-use crate::{DenseGraph, canon::bit_adj_to_graph, dense::Nodes};
+use crate::{canon::bit_adj_to_graph, dense::Nodes, DenseGraph};
 
 #[repr(C)]
 #[derive(Debug)]
@@ -59,8 +62,12 @@ impl AutoGroups {
             let mut autogroups = AutoGroups::new(dense.n, canon, dense.nodes);
             let group = groupptr(FALSE);
             makecosetreps(group);
-            
-            allgroup3(group, Some(writeautom3), &mut autogroups as *mut AutoGroups as *mut c_void);
+
+            allgroup3(
+                group,
+                Some(writeautom3),
+                &mut autogroups as *mut AutoGroups as *mut c_void,
+            );
             autogroups
         }
     }
@@ -124,7 +131,8 @@ extern "C" {
                 arg1: *mut ::std::os::raw::c_int,
                 arg2: ::std::os::raw::c_int,
                 arg3: *mut ::std::os::raw::c_int,
-                arg4: *mut ::std::os::raw::c_void),
+                arg4: *mut ::std::os::raw::c_void,
+            ),
         >,
         arg3: *mut ::std::os::raw::c_void,
     );
